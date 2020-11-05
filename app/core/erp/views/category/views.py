@@ -2,7 +2,8 @@ from django.shortcuts import render
 from core.erp.models import Category, Product
 
 from django.views.generic import ListView
-
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 def category_list(request):
     data = {
         'title': 'Listado de Categorias',
@@ -13,6 +14,9 @@ def category_list(request):
 class  CategoryListView(ListView):
     model = Category
     template_name = 'category/list.html'
+    # @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     # con este metodo modificamos la consulta 
     def get_queryset(self):
