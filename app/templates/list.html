@@ -18,8 +18,8 @@
     <script src="{% static 'lib/Buttons-1.6.5/js/buttons.bootstrap4.min.js' %}"></script>   
     <script src="{% static 'lib/Buttons-1.6.5/js/buttons.html5.min.js' %}"></script>   
     <script src="{% static 'lib/Buttons-1.6.5/js/buttons.print.min.js' %}"></script> 
-    <script src="{% static 'Responsive-2.2.6/js/dataTables.responsive.min.js' %}"></script> 
-    <script src="{% static 'Responsive-2.2.6/js/responsive.bootstrap4.min.js' %}"></script> 
+    <script src="{% static 'lib/Responsive-2.2.6/js/dataTables.responsive.min.js' %}"></script> 
+    <script src="{% static 'lib/Responsive-2.2.6/js/responsive.bootstrap4.min.js' %}"></script> 
  
 
 {% endblock %}
@@ -50,7 +50,7 @@
 
         </div>
         <div class="card-   footer">
-            <button  class="btn btn-primary btn-flat">
+            <button  class="btn btn-primary btn-flat btnTest">
                 <i class="fas fa-plus"> </i> Nuevo registro
             </button>
 
@@ -93,7 +93,23 @@
 			},
 		]
         } );
-    } );
+        $('.btnTest').on('click', function(){
+            $.ajax({
+                url: '{% url 'erp:category_list' %}',
+                type: 'POST',
+                data: {id: 2},
+                dataType: 'json'
+
+            }).done(function(data) {
+                console.log(data)
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                alert(textStatus+ ':' + errorThrown );
+            }).always(function(data) {
+               
+            });
+        });
+        
+    });
     </script>
 
 {% endblock %}

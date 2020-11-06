@@ -20,12 +20,17 @@ class  CategoryListView(ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        data = {'name': 'Andres'}
+        data = {}
+        try:
+            data = Category.objects.get(pk=request.POST['id']).toJSON()
+            # data['name'] = cat.name
+        except Exception as e:
+            data['error'] = str(e)
         return JsonResponse(data)    
 
     # con este metodo modificamos la consulta 
-    def get_queryset(self):
-        return Category.objects.filter(name__startswith='b')
+    # def get_queryset(self):
+    #     return Category.objects.filter(name__startswith='b')
 
 
     # devuelve un diccionario y podemos pasarle mas variables a nuestro contexto
