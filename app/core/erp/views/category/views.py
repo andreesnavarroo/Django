@@ -44,7 +44,7 @@ class  CategoryListView(ListView):
 class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryForm
-    template_name = 'category/create.html'
+    template_name  = 'category/create.html'
     success_url  = reverse_lazy('erp:category_list')
 
     # devuelve un diccionario y podemos pasarle mas variables a nuestro contexto
