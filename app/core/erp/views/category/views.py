@@ -2,9 +2,11 @@ from django.shortcuts import render
 from core.erp.models import Category, Product
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from core.erp.forms import CategoryForm
+from django.urls import reverse_lazy
 def category_list(request):
     data = {
         'title': 'Listado de Categorias',
@@ -37,4 +39,16 @@ class  CategoryListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Listado de Categorias'
-        return context        
+        return context   
+
+class CategoryCreateView(CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'category/create.html'
+    success_url  = reverse_lazy('erp:category_list')
+
+    # devuelve un diccionario y podemos pasarle mas variables a nuestro contexto
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Crear Categoria'
+        return context   
