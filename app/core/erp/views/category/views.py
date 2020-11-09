@@ -50,7 +50,19 @@ class CategoryCreateView(CreateView):
     template_name  = 'category/create.html'
     success_url  = reverse_lazy('erp:category_list')
 
-    # def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'add':
+                # form = CategoryForm(request.POST)
+                form = self.get_form()
+                data = form.save()                    
+            else:
+                data['error'] = 'No ha ingresado a ninguna opcion'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)           
     #     print(request.POST)
     #     form = CategoryForm(request.POST)
     #     if form.is_valid():
@@ -67,4 +79,5 @@ class CategoryCreateView(CreateView):
         context['title'] = 'Creación una Categoria'
         context['entity'] = 'Categorias'
         context['list_url'] = reverse_lazy('erp:category_list')
+        context['action'] = 'add'
         return context
