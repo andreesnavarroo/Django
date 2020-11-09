@@ -1,5 +1,5 @@
 {% extends 'body.html' %}
-
+{% load widget_tweaks %}
 {% block content %}
     <form method="post" action=".">
         <div class="card card-default">
@@ -11,7 +11,14 @@
             </div>
             <div class="card-body">
                 {% csrf_token %}
-                {{ form }}
+                {% for field in form.visible_fields %}
+                <div class="form-group">
+                    <label for="email">{{ field.label }}</label>
+                    {{ field}}
+                  </div>                
+                {% endfor %}
+
+                
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary btn-flat">
