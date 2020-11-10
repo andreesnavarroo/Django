@@ -1,5 +1,5 @@
 /**
-* Template Name: iPortfolio - v1.4.1
+* Template Name: iPortfolio - v1.2.0
 * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
@@ -66,7 +66,7 @@ h1, h2, h3, h4, h5, h6 {
   bottom: 0;
   width: 300px;
   transition: all ease-in-out 0.5s;
-  z-index: 9997;
+  z-index: 9999;
   transition: all 0.5s;
   padding: 0 15px;
   background: #040b14;
@@ -400,7 +400,7 @@ section {
 }
 
 .skills .progress .skill {
-  padding: 10px 0;
+  padding: 0;
   margin: 0 0 6px 0;
   text-transform: uppercase;
   display: block;
@@ -832,13 +832,9 @@ section {
   display: none;
   color: #fff;
   background: #ed3c0d;
-  text-align: left;
+  text-align: center;
   padding: 15px;
   font-weight: 600;
-}
-
-.contact .php-email-form .error-message br + br {
-  margin-top: 25px;
 }
 
 .contact .php-email-form .sent-message {
@@ -919,8 +915,7 @@ section {
 # Breadcrumbs
 --------------------------------------------------------------*/
 .breadcrumbs {
-  padding: 20px 0;
-  background: #f9f9f9;
+  padding: 40px 0;
 }
 
 .breadcrumbs h2 {
@@ -964,7 +959,7 @@ section {
 # Portfolio Details
 --------------------------------------------------------------*/
 .portfolio-details {
-  padding-top: 40px;
+  padding-top: 0;
 }
 
 .portfolio-details .portfolio-details-container {

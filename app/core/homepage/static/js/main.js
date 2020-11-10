@@ -1,5 +1,5 @@
 /**
-* Template Name: iPortfolio - v1.4.1
+* Template Name: iPortfolio - v1.2.0
 * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
@@ -47,19 +47,6 @@
     }
   });
 
-  // Activate smooth scroll on page load with hash links in the url
-  $(document).ready(function() {
-    if (window.location.hash) {
-      var initial_nav = window.location.hash;
-      if ($(initial_nav).length) {
-        var scrollto = $(initial_nav).offset().top;
-        $('html, body').animate({
-          scrollTop: scrollto
-        }, 1500, 'easeInOutExpo');
-      }
-    }
-  });
-
   $(document).on('click', '.mobile-nav-toggle', function(e) {
     $('body').toggleClass('mobile-nav-active');
     $('.mobile-nav-toggle i').toggleClass('icofont-navigation-menu icofont-close');
@@ -77,10 +64,10 @@
 
   // Navigation active state on scroll
   var nav_sections = $('section');
-  var main_nav = $('.nav-menu, .mobile-nav');
+  var main_nav = $('.nav-menu, #mobile-nav');
 
   $(window).on('scroll', function() {
-    var cur_pos = $(this).scrollTop() + 200;
+    var cur_pos = $(this).scrollTop() + 10;
 
     nav_sections.each(function() {
       var top = $(this).offset().top,
@@ -92,7 +79,7 @@
         }
         main_nav.find('a[href="#' + $(this).attr('id') + '"]').parent('li').addClass('active');
       }
-      if (cur_pos < 300) {
+      if (cur_pos < 200) {
         $(".nav-menu ul:first li:first").addClass('active');
       }
     });
@@ -143,7 +130,6 @@
       portfolioIsotope.isotope({
         filter: $(this).data('filter')
       });
-      aos_init();
     });
 
     // Initiate venobox (lightbox feature used in portofilo)
@@ -178,16 +164,10 @@
     items: 1
   });
 
-  // Init AOS
-  function aos_init() {
-    AOS.init({
-      duration: 1000,
-      easing: "ease-in-out-back",
-      once: true
-    });
-  }
-  $(window).on('load', function() {
-    aos_init();
+  // Initi AOS
+  AOS.init({
+    duration: 1000,
+    easing: "ease-in-out-back"
   });
 
 })(jQuery);
