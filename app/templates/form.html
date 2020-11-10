@@ -1,18 +1,22 @@
-{% extends 'body.html' %}
+{% extends 'layout.html' %}
 {% load widget_tweaks %}
 {% block content %}
     <form method="post" action=".">
-        <div class="card card-default">
+        <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="fas fa-plus"></i>
+                    {% if action == 'add' %}
+                        <i class="fas fa-plus"></i>
+                    {% else %}
+                        <i class="fas fa-edit"></i>
+                    {% endif %}
+
                     {{ title }}
                 </h3>
             </div>
             <div class="card-body">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="{{ action }}">
-
                 {% if form.errors %}
                     <div class="alert alert-danger alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -26,7 +30,6 @@
                         </ul>
                     </div>
                 {% endif %}
-
                 {% for field in form.visible_fields %}
                     <div class="form-group">
                         <label for="email">{{ field.label }}:</label>
@@ -55,8 +58,8 @@
                 icon: 'error'
             });
         {% endif %}
-       
-        $('form').on('submit', function(e){
+
+        $('form').on('submit', function (e) {
             e.preventDefault();
             var parameters = $(this).serializeArray();
             $.ajax({
@@ -64,22 +67,18 @@
                 type: 'POST',
                 data: parameters,
                 dataType: 'json'
-
-            }).done(function(data) {
-                console.log(data)
-                if(!data.hasOwnProperty('error')){
-                    location.href = '{{ list_url}}'
+            }).done(function (data) {
+                console.log(data);
+                if (!data.hasOwnProperty('error')) {
+                    location.href = '{{ list_url }}';
                     return false;
                 }
-                message_error(data.error)
+                message_error(data.error);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }).always(function (data) {
 
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                alert(textStatus+ ':' + errorThrown );
-            }).always(function(data) {
-               
             });
-
         });
-
     </script>
 {% endblock %}

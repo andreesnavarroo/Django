@@ -1,115 +1,72 @@
-{% extends 'body.html' %}
+{% extends 'layout.html' %}
 {% load static %}
-
 {% block head %}
-   
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
+    <link rel="stylesheet"
+          href="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}"/>
+    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
 
-    <link rel="stylesheet" href="{% static 'lib/DataTables-1.10.22/css/dataTables.bootstrap4.min.css' %}"/>
-    <link rel="stylesheet" href="{% static 'lib/Buttons-1.6.5/css/buttons.bootstrap4.min.css' %}"/>
-    <link rel="stylesheet" href="{% static 'lib/Responsive-2.2.6/css/responsive.bootstrap4.min.css' %}"/>
-    
+    {% block head_list %}
 
-    <script src="{% static 'lib/JSZip-2.5.0/jszip.min.js' %}"></script>     
-    <script src="{% static 'lib/pdfmake-0.1.36/pdfmake.min.js' %}"></script>   
-    <script src="{% static 'lib/pdfmake-0.1.36/vfs_fonts.js' %}"></script>   
-    <script src="{% static 'lib/DataTables-1.10.22/js/jquery.dataTables.min.js' %}"></script>   
-    <script src="{% static 'lib/DataTables-1.10.22/js/dataTables.bootstrap4.min.js' %}"></script>   
-    <script src="{% static 'lib/Buttons-1.6.5/js/dataTables.buttons.min.js' %}"></script>   
-    <script src="{% static 'lib/Buttons-1.6.5/js/buttons.bootstrap4.min.js' %}"></script>   
-    <script src="{% static 'lib/Buttons-1.6.5/js/buttons.html5.min.js' %}"></script>   
-    <script src="{% static 'lib/Buttons-1.6.5/js/buttons.print.min.js' %}"></script> 
-    <script src="{% static 'lib/Responsive-2.2.6/js/dataTables.responsive.min.js' %}"></script> 
-    <script src="{% static 'lib/Responsive-2.2.6/js/responsive.bootstrap4.min.js' %}"></script> 
- 
+    {% endblock %}
 
 {% endblock %}
 
-
 {% block content %}
-    <div class="card card-default">
+    <div class="card card-primary">
         <div class="card-header">
-        <h3 class="card-title">
-            <i class="fas fa-search"></i>
-            {{title}}
-        </h3>
+            <h3 class="card-title">
+                <i class="fas fa-search"></i>
+                {{ title }}
+            </h3>
         </div>
-
         <div class="card-body">
             <table class="table" id="data">
                 <thead>
-                {% block colums %}
-                {% endblock %}
+                {% block columns %}
 
+                {% endblock %}
                 </thead>
-                           
                 <tbody>
                 {% block rows %}
-                {% endblock %}                         
+
+                {% endblock %}
                 </tbody>
             </table>
-
         </div>
         <div class="card-footer">
-            <a  href="{{ create_url }}" class="btn btn-primary btn-flat btnTest">
-                <i class="fas fa-plus"> </i> Nuevo registro
+            <a href="{{ create_url }}" class="btn btn-primary btn-flat btnTest">
+                <i class="fas fa-plus"></i> Nuevo registro
             </a>
-
-        </div>        
-
-</div>
-
+        </div>
+    </div>
 {% endblock %}
-
 
 {% block javascript %}
     <script type="application/javascript">
-    $(document).ready(function() {
-        $('#data').DataTable( {
+        $(function () {
+            $('#data').DataTable({
+                responsive: true,
+                autoWidth: false
+            });
 
-            dom: 'Bfrtip',
-            "language": {
-                    url : '{% static 'lib/datatables-1.10.22/spanish.txt' %}'
-            },         
-            responsive: true,
-            autoWidth: false,            
-            buttons:[ 
-			{
-				extend:    'excelHtml5',
-				text:      '<i class="fas fa-file-excel"></i> ',
-				titleAttr: 'Exportar a Excel',
-				className: 'btn btn-success'
-			},
-			{
-				extend:    'pdfHtml5',
-				text:      '<i class="fas fa-file-pdf"></i> ',
-				titleAttr: 'Exportar a PDF',
-				className: 'btn btn-danger'
-			},
-			{
-				extend:    'print',
-				text:      '<i class="fa fa-print"></i> ',
-				titleAttr: 'Imprimir',
-				className: 'btn btn-info'
-			},
-		]
-        } );
-        $('.btnTest').on('click', function(){
-            $.ajax({
-                url: '{% url 'erp:category_list' %}',
-                type: 'POST',
-                data: {id: 2},
-                dataType: 'json'
+            $('.btnTest').on('click', function () {
+                $.ajax({
+                    url: '{% url 'erp:category_list' %}',
+                    type: 'POST',
+                    data: {id: 1},
+                    dataType: 'json'
+                }).done(function (data) {
+                    console.log(data);
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus + ': ' + errorThrown);
+                }).always(function (data) {
 
-            }).done(function(data) {
-                console.log(data)
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                alert(textStatus+ ':' + errorThrown );
-            }).always(function(data) {
-               
+                });
             });
         });
-        
-    });
     </script>
-
 {% endblock %}

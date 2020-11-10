@@ -1,31 +1,34 @@
 from django.forms import *
 
-from  core.erp.models import Category
+from core.erp.models import Category
+
+
 class CategoryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for form in self.visible_fields():
-            form.field.widget.attrs['class'] = 'form-control'
-            form.field.widget.attrs['autocomplete'] = 'off'
+        # for form in self.visible_fields():
+        #     form.field.widget.attrs['class'] = 'form-control'
+        #     form.field.widget.attrs['autocomplete'] = 'off'
         self.fields['name'].widget.attrs['autofocus'] = True
+
     class Meta:
         model = Category
         fields = '__all__'
         widgets = {
             'name': TextInput(
                 attrs={
-                    'placeholder':'Ingrese un Nombre',
-           
+                    'placeholder': 'Ingrese un nombre',
                 }
             ),
             'desc': Textarea(
                 attrs={
-                    'placeholder':'Ingrese un Nombre',
+                    'placeholder': 'Ingrese un nombre',
                     'rows': 3,
                     'cols': 3
                 }
-            )            
+            ),
         }
+
     def save(self, commit=True):
         data = {}
         form = super()
@@ -36,4 +39,4 @@ class CategoryForm(ModelForm):
                 data['error'] = form.errors
         except Exception as e:
             data['error'] = str(e)
-        return data        
+        return data

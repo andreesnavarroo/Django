@@ -1,28 +1,22 @@
 {% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'category/js/list.js' %}"></script>
+{% endblock %}
 
-
-
-{% block colums %}
+{% block columns %}
     <tr>
         <th scope="col" style="width: 10%;">Nro</th>
-        <th scope="col" style="width: 70%;">Nombre</th>
+        <th scope="col" style="width: 20%;">Nombre</th>
+        <th scope="col" style="width: 50%;">Descripción</th>
         <th scope="col" style="width: 20%;">Opciones</th>
-        
     </tr>
 {% endblock %}
 
 {% block rows %}
-{% for c in object_list %}   
-    <tr>
-        <td>{{ c.id }}</td>
-        <td>{{ c.name }}</td>
-        <td>
-            <a href="{% url 'erp:category_update' c.id %}" class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></a>
-            <a  href="{% url 'erp:category_delete' c.id %}" class="btn btn-danger btn-xs"><i class="far fa-trash-alt"></i></a>
-        </td>
-    </tr>
 
+{% endblock %}
 
-{% endfor %}
+{% block javascript %}
 
-{% endblock %}    
+{% endblock %}
