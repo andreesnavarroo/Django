@@ -60,7 +60,7 @@
             e.preventDefault();
             var parameters = $(this).serializeArray();
             $.ajax({
-                url: '{% url 'erp:category_create' %}',
+                url: window.location.pathname,
                 type: 'POST',
                 data: parameters,
                 dataType: 'json'

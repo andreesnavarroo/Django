@@ -17,7 +17,7 @@
         <td>{{ c.id }}</td>
         <td>{{ c.name }}</td>
         <td>
-            <button type="button" class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></button>
+            <a href="{% url 'erp:category_update' c.id %}" class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></a>
             <button type="button" class="btn btn-danger btn-xs"><i class="far fa-trash-alt"></i></button>
         </td>
     </tr>
