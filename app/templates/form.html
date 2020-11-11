@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% load widget_tweaks %}
 {% block content %}
-    <form method="post" action=".">
+    <form method="post" action="." enctype="multipart/form-data">
         <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title">
@@ -67,7 +67,8 @@
 
         $('form').on('submit', function (e) {
             e.preventDefault();
-            var parameters = $(this).serializeArray();
+            //var parameters = $(this).serializeArray();
+            var parameters = new FormData(this);
             submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
                 location.href = '{{ list_url }}';
             });
