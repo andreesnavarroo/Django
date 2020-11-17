@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from django.forms import *
 
-from core.erp.models import Category, Product
+from core.erp.models import Category, Product, Client
 
 
 class CategoryForm(ModelForm):
@@ -18,7 +20,6 @@ class CategoryForm(ModelForm):
             'name': TextInput(
                 attrs={
                     'placeholder': 'Ingrese un nombre',
-                   
                 }
             ),
             'desc': Textarea(
@@ -29,7 +30,8 @@ class CategoryForm(ModelForm):
                 }
             ),
         }
-        exclude= ['user_update', 'user_creation']
+        exclude = ['user_updated', 'user_creation']
+
     def save(self, commit=True):
         data = {}
         form = super()
@@ -78,12 +80,72 @@ class ProductForm(ModelForm):
             data['error'] = str(e)
         return data
 
+
 class TestForm(Form):
     categories = ModelChoiceField(queryset=Category.objects.all(), widget=Select(attrs={
         'class': 'form-control select2',
-         'style':'width: 100%',
+        'style': 'width: 100%'
     }))
-    productos = ModelChoiceField(queryset=Product.objects.none(), widget=Select(attrs={
+
+    products = ModelChoiceField(queryset=Product.objects.none(), widget=Select(attrs={
         'class': 'form-control select2',
-        'style':'width: 100%',
-    }))    
+        'style': 'width: 100%'
+    }))
+
+
+class ClientForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['names'].widget.attrs['autofocus'] = True
+
+    class Meta:
+        model = Client
+        fields = '__all__'
+        widgets = {
+            'names': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese sus nombres',
+                }
+            ),
+            'surnames': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese sus apellidos',
+                }
+            ),
+            'dni': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese su dni',
+                }
+            ),
+            'date_birthday': DateInput(format='%Y-%m-%d',
+                attrs={
+                    'value': datetime.now().strftime('%Y-%m-%d'),
+                }
+            ),
+            'address': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese su dirección',
+                }
+            ),
+            'gender': Select()
+        }
+        exclude = ['user_updated', 'user_creation']
+
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                form.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+    # def clean(self):
+    #     cleaned = super().clean()
+    #     if len(cleaned['name']) <= 50:
+    #         raise forms.ValidationError('Validacion xxx')
+    #         # self.add_error('name', 'Le faltan caracteres')
+    #     return cleaned
