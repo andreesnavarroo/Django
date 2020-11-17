@@ -2,17 +2,28 @@ from django.db import models
 from datetime import datetime
 
 from django.forms import model_to_dict
-
+from crum import get_current_user
 from config.settings import MEDIA_URL, STATIC_URL
 from core.erp.choices import gender_choices
+from core.models import BaseModel
 
 
-class Category(models.Model):
+class Category(BaseModel):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
     desc = models.CharField(max_length=500, null=True, blank=True, verbose_name='Descripción')
 
     def __str__(self):
         return self.name
+
+    def save(self, force_insert=False, force_update=False, using=None,
+            update_fields=None):
+        user = get_current_user()
+        if user is not None:
+            if not self.pk:
+                self.user_creation = user
+            else:
+                self.user_updated = user
+        super(Category, self).save()    
 
     def toJSON(self):
         item = model_to_dict(self)
@@ -24,7 +35,7 @@ class Category(models.Model):
         ordering = ['id']
 
 
-class Product(models.Model):
+class Product(BaseModel):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
     cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoría')
     image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True, verbose_name='Imagen')
@@ -44,7 +55,7 @@ class Product(models.Model):
         ordering = ['id']
 
 
-class Client(models.Model):
+class Client(BaseModel):
     names = models.CharField(max_length=150, verbose_name='Nombres')
     surnames = models.CharField(max_length=150, verbose_name='Apellidos')
     dni = models.CharField(max_length=10, unique=True, verbose_name='Dni')
