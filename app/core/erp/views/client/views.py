@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
+from core.erp.forms import ClientForm
 from core.erp.models import Client
 
 
@@ -24,6 +25,15 @@ class ClientView(TemplateView):
                 data = []
                 for i in Client.objects.all():
                     data.append(i.toJSON())
+            elif action == 'add':
+                cli = Client()
+                cli.names = request.POST['names']
+                cli.surnames = request.POST['surnames']
+                cli.dni = request.POST['dni']
+                cli.date_birthday = request.POST['date_birthday']
+                cli.address = request.POST['address']
+                cli.gender = request.POST['gender']
+                cli.save()
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
@@ -35,4 +45,5 @@ class ClientView(TemplateView):
         context['title'] = 'Listado de Clientes'
         context['list_url'] = reverse_lazy('erp:client')
         context['entity'] = 'Clientes'
+        context['form'] = ClientForm()
         return context
