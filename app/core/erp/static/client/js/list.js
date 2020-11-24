@@ -21,7 +21,7 @@ function getData() {
             {"data": "surnames"},
             {"data": "dni"},
             {"data": "date_birthday"},
-            {"data": "gender"},
+            {"data": "gender.name"},
             {"data": "id"},
         ],
         columnDefs: [
@@ -30,7 +30,7 @@ function getData() {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    var buttons = '<a href="#" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> ';
+                    var buttons = '<a href="#" rel="edit" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> ';
                     buttons += '<a href="#" type="button" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a>';
                     return buttons;
                 }
@@ -57,8 +57,24 @@ $(function () {
         $('#myModalClient').modal('show');
     });
 
+    $('#data tbody').on('click','a[rel="edit"]', function (){
+        modal_title.find('span').html('Edición de un cliente');
+        modal_title.find('i').removeClass().addClass('fas fa-edit');        
+        var tr = tblClient.cell($(this).closest('td, li')).index();
+        var data = tblClient.row(tr.row).data();
+        $('input[name="action"]').val('edit');
+        $('input[name="id"]').val(data.id);
+        $('input[name="names"]').val(data.names);
+        $('input[name="surnames"]').val(data.surnames);
+        $('input[name="dni"]').val(data.dni);
+        $('input[name="date_birthday"]').val(data.date_birthday);
+        $('input[name="address"]').val(data.address);
+        $('select[name="gender"]').val(data.gender.id);
+        $('#myModalClient').modal('show');
+    });
+
     $('#myModalClient').on('shown.bs.modal', function () {
-        $('form')[0].reset();
+        // $('form')[0].reset();
     });
 
     $('form').on('submit', function (e) {
