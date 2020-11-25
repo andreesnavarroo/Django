@@ -92,6 +92,11 @@ class TestForm(Form):
         'style': 'width: 100%'
     }))
 
+    search = CharField(widget=TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Ingrese una descripción'
+    }))
+
 
 class ClientForm(ModelForm):
     def __init__(self, *args, **kwargs):
