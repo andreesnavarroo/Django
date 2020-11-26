@@ -1,5 +1,4 @@
 {% extends 'list.html' %}
-{% load widget_tweaks %}
 {% load static %}
 {% block head_list %}
     <script src="{% static 'client/js/list.js' %}"></script>
@@ -17,51 +16,6 @@
     </tr>
 {% endblock %}
 
-{% block rows %}
-
-{% endblock %}
-
-{% block buttons_list %}
-    <a class="btn btn-primary btn-flat btnAdd" style="color: white;">
-        <i class="fas fa-plus"></i> Nuevo registro
-    </a>
-    <a href="{{ list_url }}" class="btn btn-success btn-flat">
-        <i class="fas fa-sync"></i> Actualizar
-    </a>
-{% endblock %}
-
 {% block javascript %}
-    <!-- Modal -->
-    <div class="modal fade" id="myModalClient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <form method="post" action="." enctype="multipart/form-data">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <b><i class="fas fa-search"></i> <span></span></b>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container-fluid">
-                            <input name="action" type="hidden" value="add">
-                            <input name="id" id="id" type="hidden" value="0">
-                            {% for field in form.visible_fields %}
-                                <div class="form-group">
-                                    <label for="email">{{ field.label }}:</label>
-                                    {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary btn-flat btn-block"><i class="fas fa-save"></i> Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+
 {% endblock %}

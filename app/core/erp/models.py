@@ -1,7 +1,6 @@
-from crum import get_current_user
-from django.db import models
 from datetime import datetime
 
+from django.db import models
 from django.forms import model_to_dict
 
 from config.settings import MEDIA_URL, STATIC_URL
@@ -9,25 +8,15 @@ from core.erp.choices import gender_choices
 from core.models import BaseModel
 
 
-class Category(BaseModel):
+class Category(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
     desc = models.CharField(max_length=500, null=True, blank=True, verbose_name='Descripción')
 
     def __str__(self):
         return self.name
-
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        user = get_current_user()
-        if user is not None:
-            if not self.pk:
-                self.user_creation = user
-            else:
-                self.user_updated = user
-        super(Category, self).save()
-
+        
     def toJSON(self):
-        item = model_to_dict(self, exclude=['user_creation', 'user_updated'])
+        item = model_to_dict(self)
         return item
 
     class Meta:
@@ -44,6 +33,13 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['cat'] = self.cat.toJSON()
+        item['image'] = self.get_image()
+        item['pvp'] = format(self.pvp, '.2f')
+        return item
 
     def get_image(self):
         if self.image:

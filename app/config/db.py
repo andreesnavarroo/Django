@@ -9,6 +9,8 @@ SQLITE = {
     }
 }
 
+# psycopg2
+
 POSTGRESQL = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -20,3 +22,18 @@ POSTGRESQL = {
     }
 }
 
+# mysqlclient
+
+MYSQL = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'db',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+        }
+    }
+}
