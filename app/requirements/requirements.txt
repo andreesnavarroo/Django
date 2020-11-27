@@ -3,7 +3,9 @@ Django==3.0.4
 django-crum==0.7.5
 django-widget-tweaks==1.4.8
 freeze==1.0.10
+mysqlclient==1.4.6
 Pillow==7.1.1
+psycopg2==2.8.5
 pytz==2019.3
 six==1.14.0
 sqlparse==0.3.1
