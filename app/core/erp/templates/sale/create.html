@@ -1,6 +1,10 @@
 {% extends 'list.html' %}
 {% load static %}
 {% block head_list %}
+
+    <link href="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+
     <link href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet"/>
     <link href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
     <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
@@ -39,7 +43,7 @@
                             <div class="form-group">
                                 <label>Buscador de productos:</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" name="search"
                                            placeholder="Ingrese una descripción de producto" autocomplete="off">
                                     <span class="input-group-append">
                                         <button type="button" class="btn btn-danger btn-flat"><i
@@ -48,7 +52,7 @@
                                 </div>
                             </div>
                             <hr>
-                            <table class="table table-bordered" id="data">
+                            <table class="table table-bordered" id="tblProducts">
                                 <thead>
                                 <tr>
                                     <th>Eliminar</th>

@@ -13,7 +13,7 @@ class Category(models.Model):
     desc = models.CharField(max_length=500, null=True, blank=True, verbose_name='Descripción')
 
     def __str__(self):
-        return self.name, Category.objects.filter(state=True)
+        return self.name
 
     def toJSON(self):
         item = model_to_dict(self)
