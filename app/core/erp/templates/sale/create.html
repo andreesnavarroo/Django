@@ -90,7 +90,11 @@
                             <div class="form-group">
                                 <label>IVA:</label>
                                 {{ form.iva }}
-                            </div>
+                            </div>             
+                            <div class="form-group">
+                                <label>IVA Calculado:</label>
+                                <input type="text" class="form-control" readonly name="ivacal" value="0.00">
+                            </div>                                           
                             <div class="form-group">
                                 <label>Total a pagar:</label>
                                 {{ form.total }}

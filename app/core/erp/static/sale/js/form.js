@@ -7,12 +7,30 @@ var vents = {
         total: 0.00,
         products: []
     },
+    calculate_invoice: function(){
+        var subtotal = 0.00;
+        var iva =  $('input[name="iva"]').val()
+        $.each(this.items.products, function(pos, dict){
+            dict.subtotal = dict.cant * parseFloat(dict.pvp);
+            subtotal+=dict.subtotal;
+            
+        });
+        this.items.subtotal = subtotal;
+        this.items.iva = this.items.subtotal * iva;
+        this.items.total = this.items.iva + subtotal
+        $('input[name="subtotal"]').val(this.items.subtotal.toFixed(2));
+        $('input[name="ivacal"]').val(this.items.iva.toFixed(2));
+        $('input[name="total"]').val(this.items.total.toFixed(2));
+    },
+    
     add: function(item){
         this.items.products.push(item);
         this.list();
     },
 
     list: function () {
+        this.calculate_invoice();
+
         $('#tblProducts').DataTable({
             responsive: true,
             autoWidth: false,
@@ -94,7 +112,10 @@ $(function () {
         boostat: 5,
         maxboostedstep: 10,
         postfix: '%'
-    });
+    }).on('change', function (){
+        vents.calculate_invoice();
+    })
+    .val(0.19);
 
     // Buscqueda de productos
 
@@ -120,11 +141,11 @@ $(function () {
         minLength: 1,
         select: function (event, ui) {
             event.preventDefault();
-            console.clear();
+            // console.clear();
             ui.item.cant = 1;
             ui.item.subtotal = 0;
             vents.add(ui.item);
-            console.log(vents.items)
+            // console.log(vents.items)
             $(this).val('');
         }
     });    
