@@ -60,7 +60,7 @@ var vents = {
                     class: 'text-center',
                     orderable: false,
                     render: function (data, type, row) {
-                        return '<a rel="remove" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a>';
+                        return '<a rel="remove" class="btn btn-danger btn-xs btn-flat" style="color: white;"><i class="fas fa-trash-alt"></i></a>';
                         
                     }
                 },
@@ -159,7 +159,29 @@ $(function () {
         }
     });    
 
-    $('#tblProducts tbody').on('change', 'input[name="cant"]', function(){
+    // eliminar todos los items
+    $('.btnRemoveAll').on('click', function(){
+        if (vents.items.products.length === 0) return false;
+        alert_action('Notificación!', 'Estas seguro de eliminar todos los items de tu detalle?', function(){
+            vents.items.products = []
+            vents.list();
+        });
+
+ 
+    });
+
+
+    $('#tblProducts tbody')
+        .on('click', 'a[rel="remove"]', function(){
+            var tr = tblProducts.cell($(this).closest('td, li')).index();
+            alert_action('Notificación!', 'Estas seguro de eliminar este item de tu detalle?', function(){
+                vents.items.products.splice(tr.row, 1);
+                vents.list();
+            });            
+            
+
+        })
+        .on('change', 'input[name="cant"]', function(){
         console.clear();
         var cant = parseInt($(this).val());
         var tr = tblProducts.cell($(this).closest('td, li')).index();
