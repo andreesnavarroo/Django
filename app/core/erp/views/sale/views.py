@@ -6,10 +6,10 @@ from django.views.decorators.csrf import csrf_exempt
 from core.erp.forms import SaleForm
 from core.erp.mixins import ValidatePermissionRequiredMixin
 from django.views.generic import CreateView
-
-from core.erp.models import Sale
+from django.db import transaction
+from core.erp.models import Sale, DetSale
 from core.erp.models import Product
-
+import json
 class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
     model = Sale
     form_class = SaleForm
@@ -33,6 +33,24 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                     item = i.toJSON()
                     item['value'] = i.name
                     data.append(item)
+            elif action == 'add':
+                with transaction.atomic():
+                    vents = json.loads(request.POST['vents'])
+                    sale = Sale()
+                    sale.date_joined = vents['date_joined'] 
+                    sale.cli_id = vents['cli']
+                    sale.subtotal = float(vents['subtotal'])
+                    sale.iva = float(vents['iva'])
+                    sale.total = float(vents['total'])
+                    sale.save()
+                    for i in vents['products']:
+                        det = DetSale()
+                        det.sale_id = sale.id 
+                        det.prod_id = i['id']
+                        det.cant = int(i['cant'])
+                        det.price = float(i['pvp'])
+                        det.subtotal = float(i['subtotal'])
+                        det.save()
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
@@ -46,3 +64,4 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
         context['list_url'] = self.success_url
         context['action'] = 'add'
         return context
+        sale.cli_id = vents['cli']
