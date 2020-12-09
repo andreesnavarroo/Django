@@ -24,3 +24,7 @@ table.table-bordered.dataTable tbody td {
 .card-footer{
     border-top: 1px solid #dee2e6;
 }
+
+.btn{
+    color: white !important;
+}

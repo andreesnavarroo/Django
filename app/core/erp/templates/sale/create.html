@@ -1,7 +1,6 @@
 {% extends 'list.html' %}
 {% load static %}
 {% block head_list %}
-
     <link href="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.css' %}" rel="stylesheet"/>
     <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
 
@@ -21,7 +20,7 @@
 {% endblock %}
 
 {% block content %}
-    <form method="POST">
+    <form method="post">
         <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title">
@@ -41,21 +40,20 @@
                                 <h3 class="card-title"><i class="fas fa-boxes"></i> Detalle de productos</h3>
                             </div>
                             <div class="card-body">
-                                <input type="hidden" name="action" value="{{ action }}">
                                 <div class="form-group">
                                     <label>Buscador de productos:</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="search"
                                                placeholder="Ingrese una descripción de producto" autocomplete="off">
                                         <span class="input-group-append">
-                                            <button type="button" class="btn btn-danger btn-flat btnClearSearch"><i
-                                                    class="fas fa-times"></i></button>
-                                          </span>
+                                        <button type="button" class="btn btn-danger btn-flat btnClearSearch"><i
+                                                class="fas fa-times"></i></button>
+                                      </span>
                                     </div>
                                 </div>
                                 <hr>
                                 <button type="button" class="btn btn-danger btn-xs btn-flat btnRemoveAll">
-                                    <i class="fas fa-trash"></i> Eliminar todos mis items 
+                                    <i class="fas fa-trash"></i> Eliminar todos mis items
                                 </button>
                                 <hr>
                                 <table class="table table-bordered" id="tblProducts">
@@ -81,6 +79,7 @@
                                 <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Datos de la factura</h3>
                             </div>
                             <div class="card-body">
+                                <input type="hidden" name="action" value="{{ action }}">
                                 <div class="form-group">
                                     <label>Fecha de venta:</label>
                                     {{ form.date_joined }}
@@ -96,11 +95,11 @@
                                 <div class="form-group">
                                     <label>IVA:</label>
                                     {{ form.iva }}
-                                </div>             
+                                </div>
                                 <div class="form-group">
                                     <label>IVA Calculado:</label>
-                                    <input type="text" class="form-control" readonly name="ivacal" value="0.00">
-                                </div>                                           
+                                    <input type="text" class="form-control" readonly name="ivacalc" value="0.00">
+                                </div>
                                 <div class="form-group">
                                     <label>Total a pagar:</label>
                                     {{ form.total }}
@@ -120,5 +119,4 @@
             </div>
         </div>
     </form>
-
 {% endblock %}

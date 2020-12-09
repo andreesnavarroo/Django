@@ -85,6 +85,15 @@ class Sale(models.Model):
     def __str__(self):
         return self.cli.names
 
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['cli'] = self.cli.toJSON()
+        item['subtotal'] = format(self.subtotal, '.2f')
+        item['iva'] = format(self.iva, '.2f')
+        item['total'] = format(self.total, '.2f')
+        item['date_joined'] = self.date_joined.strftime('%Y-%m-%d')
+        return item
+
     class Meta:
         verbose_name = 'Venta'
         verbose_name_plural = 'Ventas'
