@@ -31,6 +31,11 @@ class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
                 data = []
                 for i in Sale.objects.all():
                     data.append(i.toJSON())
+            elif action == 'search_details_prod':
+                print('entro')
+                data = []                    
+                for i in DetSale.objects.filter(sale_id=request.POST['id']):
+                    data.append(i.toJSON())
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
