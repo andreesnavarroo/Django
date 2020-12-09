@@ -1,3 +1,4 @@
+var tblProducts;
 var vents = {
     items : {
         cli: '',
@@ -31,12 +32,20 @@ var vents = {
     list: function () {
         this.calculate_invoice();
 
-        $('#tblProducts').DataTable({
+        tblProducts = $('#tblProducts').DataTable({
             responsive: true,
             autoWidth: false,
             destroy: true,
             deferRender: true,
             data: this.items.products,
+            rowCallback( row, data, displayNum, displayIndex, dataIndex ){
+                // row nos devuelve el tr, y luego bucamos el elemento
+                $(row).find('input[name="cant"]').TouchSpin({
+                    min: 1,
+                    max: 1000000000,
+                    step: 1
+                });                                
+            },
             columns: [
                 {"data": "id"},
                 {"data": "name"},
@@ -69,7 +78,7 @@ var vents = {
                     class: 'text-center',
                     orderable: false,
                     render: function (data, type, row) {
-                        return '<input type="text" name="cant" class"form-control form-control-sm" autocomplete="off" value="'+data+'" >';
+                        return '<input type="text" name="cant" class"form-control form-control-sm input-sm" autocomplete="off" value="'+data+'" >';
                         
                     }
                 },  
@@ -149,4 +158,14 @@ $(function () {
             $(this).val('');
         }
     });    
+
+    $('#tblProducts tbody').on('change', 'input[name="cant"]', function(){
+        console.clear();
+        var cant = parseInt($(this).val());
+        var tr = tblProducts.cell($(this).closest('td, li')).index();
+        vents.items.products[tr.row].cant = cant;
+        vents.calculate_invoice();
+        $('td:eq(5)', tblProducts.row(tr.row).node()).html('$' +  vents.items.products[tr.row].subtotal.toFixed(2));
+
+    });
 });
