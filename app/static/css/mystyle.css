@@ -28,3 +28,11 @@ table.table-bordered.dataTable tbody td {
 .btn{
     color: white !important;
 }
+
+td.details-control {
+    background: url('../lib/datatables-1.10.20//images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../lib/datatables-1.10.20/images/details_close.png') no-repeat center center;
+}

@@ -92,6 +92,7 @@ class Sale(models.Model):
         item['iva'] = format(self.iva, '.2f')
         item['total'] = format(self.total, '.2f')
         item['date_joined'] = self.date_joined.strftime('%Y-%m-%d')
+        item['det'] = [i.toJSON() for i in self.detsale_set.all()]
         return item
 
     class Meta:

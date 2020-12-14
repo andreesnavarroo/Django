@@ -202,5 +202,5 @@ $(function () {
         });
     });
 
-    vents.list();
+    // vents.list();
 });
