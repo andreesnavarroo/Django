@@ -1,25 +1,22 @@
 import json
+import os
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponseRedirect
+from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView, ListView, DeleteView, UpdateView, View
+from xhtml2pdf import pisa
 
 from core.erp.forms import SaleForm
 from core.erp.mixins import ValidatePermissionRequiredMixin
-from django.views.generic import CreateView, ListView, DeleteView, UpdateView, View
-
 from core.erp.models import Sale, Product, DetSale
 
-
-import os
-from django.conf import settings
-from django.http import HttpResponse
-from django.template.loader import get_template
-from xhtml2pdf import pisa
-from django.contrib.staticfiles import finders
 
 class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Sale
@@ -78,7 +75,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                 prods = Product.objects.filter(name__icontains=request.POST['term'])[0:10]
                 for i in prods:
                     item = i.toJSON()
-                    #item['value'] = i.name
+                    # item['value'] = i.name
                     item['text'] = i.name
                     data.append(item)
             elif action == 'add':
@@ -141,7 +138,7 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
             elif action == 'edit':
                 with transaction.atomic():
                     vents = json.loads(request.POST['vents'])
-                    #sale = Sale.objects.get(pk=self.get_object().id)
+                    # sale = Sale.objects.get(pk=self.get_object().id)
                     sale = self.get_object()
                     sale.date_joined = vents['date_joined']
                     sale.cli_id = vents['cli']
@@ -215,53 +212,47 @@ class SaleDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Delete
 class SaleInvoicePdfView(View):
 
     def link_callback(self, uri, rel):
-            """
-            Convert HTML URIs to absolute system paths so xhtml2pdf can access those
-            resources
-            """
-            result = finders.find(uri)
-            if result:
-                    if not isinstance(result, (list, tuple)):
-                            result = [result]
-                    result = list(os.path.realpath(path) for path in result)
-                    path=result[0]
-            else:
-                    sUrl = settings.STATIC_URL        # Typically /static/
-                    sRoot = settings.STATIC_ROOT      # Typically /home/userX/project_static/
-                    mUrl = settings.MEDIA_URL         # Typically /media/
-                    mRoot = settings.MEDIA_ROOT       # Typically /home/userX/project_static/media/
+        """
+        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+        resources
+        """
+        # use short variable names
+        sUrl = settings.STATIC_URL  # Typically /static/
+        sRoot = settings.STATIC_ROOT  # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL  # Typically /static/media/
+        mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
 
-                    if uri.startswith(mUrl):
-                            path = os.path.join(mRoot, uri.replace(mUrl, ""))
-                    elif uri.startswith(sUrl):
-                            path = os.path.join(sRoot, uri.replace(sUrl, ""))
-                    else:
-                            return uri
+        # convert URIs to absolute system paths
+        if uri.startswith(mUrl):
+            path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            return uri  # handle absolute uri (ie: http://some.tld/foo.png)
 
-            # make sure that file exists
-            if not os.path.isfile(path):
-                    raise Exception(
-                            'media URI must start with %s or %s' % (sUrl, mUrl)
-                    )
-            return path    
+        # make sure that file exists
+        if not os.path.isfile(path):
+            raise Exception(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+        return path
 
     def get(self, request, *args, **kwargs):
         try:
             template = get_template('sale/invoice.html')
             context = {
                 'sale': Sale.objects.get(pk=self.kwargs['pk']),
-                'comp': {'name': 'VENTA Y EMPEÑOS S.A', 'ruc': '900213123', 'address':'Monteria, Cordoba'},
-                'icon': '{}{}'.format(settings.STATIC_URL, 'img/logo.png')
+                'comp': {'name': 'ALGORISOFT S.A.', 'ruc': '9999999999999', 'address': 'Milagro, Ecuador'},
+                'icon': '{}{}'.format(settings.MEDIA_URL, 'logo.png')
             }
             html = template.render(context)
             response = HttpResponse(content_type='application/pdf')
             #response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-            # create a pdf
-            pisa_status = pisa.CreatePDF(
-                html, dest=response, 
+            pisaStatus = pisa.CreatePDF(
+                html, dest=response,
                 link_callback=self.link_callback
             )
             return response
         except:
             pass
-        return HttpResponseRedirect(reverse_lazy('erp:sale_list'))            
+        return HttpResponseRedirect(reverse_lazy('erp:sale_list'))
