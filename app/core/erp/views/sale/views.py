@@ -96,6 +96,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                         det.price = float(i['pvp'])
                         det.subtotal = float(i['subtotal'])
                         det.save()
+                    data = {'id': sale.id}                         
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
@@ -155,6 +156,7 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
                         det.price = float(i['pvp'])
                         det.subtotal = float(i['subtotal'])
                         det.save()
+                    data = {'id': sale.id} 
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
