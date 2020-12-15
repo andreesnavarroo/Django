@@ -43,12 +43,8 @@
                                 <div class="form-group">
                                     <label>Buscador de productos:</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" name="search"
-                                               placeholder="Ingrese una descripción de producto" autocomplete="off">
-                                        <span class="input-group-append">
-                                        <button type="button" class="btn btn-danger btn-flat btnClearSearch"><i
-                                                class="fas fa-times"></i></button>
-                                      </span>
+                                        <select class="form-control select2" style="width: 100%;" name="search">
+                                        </select>
                                     </div>
                                 </div>
                                 <hr>
@@ -119,10 +115,8 @@
             </div>
         </div>
     </form>
-
     <script>
-
-        vents.items.products = {{ det|safe }}
-        vents.list();
+        vents.items.products = {{ det|safe }};
+        // Se removio el vents.list(); para calcular bien el iva en el editar. Revisar al final del archivo form.js se lo puso.
     </script>
 {% endblock %}

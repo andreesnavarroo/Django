@@ -1,4 +1,5 @@
 var tblSale;
+
 function format(d) {
     console.log(d);
     var html = '<table class="table">';
@@ -22,7 +23,9 @@ function format(d) {
     html += '</tbody>';
     return html;
 }
+
 $(function () {
+
     tblSale = $('#data').DataTable({
         //responsive: true,
         scrollX: true,
@@ -39,9 +42,9 @@ $(function () {
         },
         columns: [
             {
-                "className":      'details-control',
-                "orderable":      false,
-                "data":           null,
+                "className": 'details-control',
+                "orderable": false,
+                "data": null,
                 "defaultContent": ''
             },
             {"data": "cli.names"},
@@ -67,8 +70,7 @@ $(function () {
                 render: function (data, type, row) {
                     var buttons = '<a href="/erp/sale/delete/' + row.id + '/" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a> ';
                     buttons += '<a href="/erp/sale/update/' + row.id + '/" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> ';
-                    buttons += '<a rel="details"  class="btn btn-success btn-xs btn-flat"><i class="fas fa-search"></i></a> ';
-                    
+                    buttons += '<a rel="details" class="btn btn-success btn-xs btn-flat"><i class="fas fa-search"></i></a> ';
                     return buttons;
                 }
             },
@@ -78,18 +80,18 @@ $(function () {
         }
     });
 
-    // event cant
     $('#data tbody')
         .on('click', 'a[rel="details"]', function () {
             var tr = tblSale.cell($(this).closest('td, li')).index();
             var data = tblSale.row(tr.row).data();
-            console.log(data.id)
+            console.log(data);
 
             $('#tblDet').DataTable({
                 responsive: true,
                 autoWidth: false,
                 destroy: true,
                 deferRender: true,
+                //data: data.det,
                 ajax: {
                     url: window.location.pathname,
                     type: 'POST',
@@ -125,25 +127,20 @@ $(function () {
                 initComplete: function (settings, json) {
 
                 }
-                
             });
-        
-            $('#myModalDet').modal('show');
+
+            $('#myModelDet').modal('show');
         })
         .on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
-            var row = tblSale.row( tr );
-     
-            if ( row.child.isShown() ) {
-                // This row is already open - close it
+            var row = tblSale.row(tr);
+            if (row.child.isShown()) {
                 row.child.hide();
                 tr.removeClass('shown');
-            }
-            else {
-                // Open this row
-                row.child( format(row.data()) ).show();
+            } else {
+                row.child(format(row.data())).show();
                 tr.addClass('shown');
             }
-        } );        
-  
+        });
+
 });

@@ -93,6 +93,31 @@ var vents = {
     },
 };
 
+function formatRepo(repo) {
+    if (repo.loading) {
+        return repo.text;
+    }
+
+    var option = $(
+        '<div class="wrapper container">'+
+        '<div class="row">' +
+        '<div class="col-lg-1">' +
+        '<img src="' + repo.image + '" class="img-fluid img-thumbnail d-block mx-auto rounded">' +
+        '</div>' +
+        '<div class="col-lg-11 text-left shadow-sm">' +
+        //'<br>' +
+        '<p style="margin-bottom: 0;">' +
+        '<b>Nombre:</b> ' + repo.name + '<br>' +
+        '<b>Categoría:</b> ' + repo.cat.name + '<br>' +
+        '<b>PVP:</b> <span class="badge badge-warning">$'+repo.pvp+'</span>'+
+        '</p>' +
+        '</div>' +
+        '</div>' +
+        '</div>');
+
+    return option;
+}
+
 $(function () {
 
     $('.select2').select2({
@@ -122,7 +147,7 @@ $(function () {
 
     // search products
 
-    $('input[name="search"]').autocomplete({
+    /*$('input[name="search"]').autocomplete({
         source: function (request, response) {
             $.ajax({
                 url: window.location.pathname,
@@ -151,7 +176,7 @@ $(function () {
             vents.add(ui.item);
             $(this).val('');
         }
-    });
+    });*/
 
     $('.btnRemoveAll').on('click', function () {
         if (vents.items.products.length === 0) return false;
@@ -187,7 +212,7 @@ $(function () {
     $('form').on('submit', function (e) {
         e.preventDefault();
 
-        if(vents.items.products.length === 0){
+        if (vents.items.products.length === 0) {
             message_error('Debe al menos tener un item en su detalle de venta');
             return false;
         }
@@ -202,5 +227,39 @@ $(function () {
         });
     });
 
-    // vents.list();
+    $('select[name="search"]').select2({
+        theme: "bootstrap4",
+        language: 'es',
+        allowClear: true,
+        ajax: {
+            delay: 250,
+            type: 'POST',
+            url: window.location.pathname,
+            data: function (params) {
+                var queryParameters = {
+                    term: params.term,
+                    action: 'search_products'
+                }
+                return queryParameters;
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+        },
+        placeholder: 'Ingrese una descripción',
+        minimumInputLength: 1,
+        templateResult: formatRepo,
+    }).on('select2:select', function (e) {
+        var data = e.params.data;
+        data.cant = 1;
+        data.subtotal = 0.00;
+        vents.add(data);
+        $(this).val('').trigger('change.select2');
+    });
+
+    vents.list();
+    // Esto se puso aqui para que funcione bien el editar y calcule bien los valores del iva. // sino tomaría el valor del iva de la base debe
+    // coger el que pusimos al inicializarlo. 
 });

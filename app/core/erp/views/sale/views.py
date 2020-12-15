@@ -32,8 +32,7 @@ class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
                 for i in Sale.objects.all():
                     data.append(i.toJSON())
             elif action == 'search_details_prod':
-                print('entro')
-                data = []                    
+                data = []
                 for i in DetSale.objects.filter(sale_id=request.POST['id']):
                     data.append(i.toJSON())
             else:
@@ -72,7 +71,8 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                 prods = Product.objects.filter(name__icontains=request.POST['term'])[0:10]
                 for i in prods:
                     item = i.toJSON()
-                    item['value'] = i.name
+                    #item['value'] = i.name
+                    item['text'] = i.name
                     data.append(item)
             elif action == 'add':
                 with transaction.atomic():
@@ -107,6 +107,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
         context['det'] = []
         return context
 
+
 class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
     model = Sale
     form_class = SaleForm
@@ -133,7 +134,7 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
             elif action == 'edit':
                 with transaction.atomic():
                     vents = json.loads(request.POST['vents'])
-                    # sale = Sale.objects.get(pk=self.get_object().id)
+                    #sale = Sale.objects.get(pk=self.get_object().id)
                     sale = self.get_object()
                     sale.date_joined = vents['date_joined']
                     sale.cli_id = vents['cli']
@@ -169,12 +170,13 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Edicion de una Venta'
+        context['title'] = 'Edición de una Venta'
         context['entity'] = 'Ventas'
         context['list_url'] = self.success_url
         context['action'] = 'edit'
         context['det'] = json.dumps(self.get_details_product())
         return context
+
 
 class SaleDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
     model = Sale

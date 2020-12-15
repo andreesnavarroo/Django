@@ -116,7 +116,7 @@ class DetSale(models.Model):
         item['prod'] = self.prod.toJSON()
         item['price'] = format(self.price, '.2f')
         item['subtotal'] = format(self.subtotal, '.2f')
-        return item        
+        return item
 
     class Meta:
         verbose_name = 'Detalle de Venta'
